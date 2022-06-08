@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Herick Guillen">
+<title>Herick Guillen</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Style the header */
+  header {
+    background-color: #eba51b;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+  }
+  
+  /* Create two columns/boxes that floats next to each other */
+  nav {
+    float: left;
+    width: 30%;
+    height: 375px; /* only for demonstration, should be removed */
+    background: #ccc;
+    padding: 20px;
+  }
+  
+  /* Style the list inside the menu */
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  article {
+    float: left;
+    padding: 20px;
+    width: 70%;
+    background-color: #f1f1f1;
+    height: 375px; /* only for demonstration, should be removed */
+  }
+  
+  /* Clear floats after the columns */
+  section::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Style the footer */
+  footer {
+    background-color: #eba51b;
+    padding: 10px;
+    text-align: center;
+    color: white;
+  }
+  
+  /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+  @media (max-width: 600px) {
+    nav, article {
+      width: 100%;
+      height: auto;
+    }
+  }
+  </style>
+</head>
+<body>
+<header>
+  <h1 style="text-align: center;">CS 213 Assignments</h1>
+</header>
+<section>
+  <nav>
+    <ul>
+      <li ><h2 style="font-size: 20px; font-weight: bold;">IMPORTANT SITES</h2></li>
+      <li><a href="https://validator.w3.org/" target="_blank">HTML Validator</a></li>
+      <li><a href="http://www.w3schools.com/html/" target="_blank">W3 Schools</a></li>
+      <li><a href="https://degreeportal.byupathway.org/#/" target="_blank">BYU Portal</a></li>
+    </ul>
+  </nav>
+  
+  <article>
+    <h2 style="text-align: center;">*** Winter 2021 ***</h2>
+    <ul style="text-align: center; list-style-position: inside;">
+      <li><a href="./week02/assign02.html">Week 02</a></li>
+      <li><a href="./week03/assign03.html">Week 03</a></li>
+      <li><a href="./week04/assign04.html">Week 04</a></li>
+      <li><a href="./week05/assign05.html">Week 05</a></li>
+      <li><a href="./week06/assign06.html">Week 06</a></li>
+      <li><a href="./week07/assign07.html">Week 07</a></li>
+      <li><a href="./week08/assign08.html">Week 08</a></li>
+      <li><a href="./week09/assign09.html">Week 09</a></li>
+      <li><a href="./week10/mortgage.html">Week 10 - Section 1</a></li>
+      <li><a href="./week10/assign10.html">Week 10 - Section 2</a></li>
+      <li><a href="./week11/assign11.html">Week 11</a></li>
+      <li><a href="./week12/assign12.html">Week 12</a></li>
+      <li><a href="./week13/assign13.html">Week 13</a></li>
+    </ul>
+  </article>
+</section>
+
+<footer>
+  <p>Welcome</p>
+</footer>
+</body>
+</html>
