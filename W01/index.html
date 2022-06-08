@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Herick Guillen">
+<title>Herick Guillen</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Style the header */
+  header {
+    background-color: #eba51b;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+  }
+  
+  /* Create two columns/boxes that floats next to each other */
+  nav {
+    float: left;
+    width: 30%;
+    height: 375px; /* only for demonstration, should be removed */
+    background: #ccc;
+    padding: 20px;
+  }
+  
+  /* Style the list inside the menu */
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  article {
+    float: left;
+    padding: 20px;
+    width: 70%;
+    background-color: #f1f1f1;
+    height: 375px; /* only for demonstration, should be removed */
+  }
+  
+  /* Clear floats after the columns */
+  section::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Style the footer */
+  footer {
+    background-color: #eba51b;
+    padding: 10px;
+    text-align: center;
+    color: white;
+  }
+  
+  /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+  @media (max-width: 600px) {
+    nav, article {
+      width: 100%;
+      height: auto;
+    }
+  }
+  </style>
+</head>
+<body>
+<header>
+  <h1 style="text-align: center;">WDD330 Notes from the readings</h1>
+</header>
+<section>
+  <nav>
+    <ul>
+      <li ><h2 style="font-size: 20px; font-weight: bold;">IMPORTANT SITES</h2></li>
+      <li><a href="https://validator.w3.org/" target="_blank">HTML Validator</a></li>
+      <li><a href="http://www.w3schools.com/html/" target="_blank">W3 Schools</a></li>
+      <li><a href="https://degreeportal.byupathway.org/#/" target="_blank">BYU Portal</a></li>
+    </ul>
+  </nav>
+  
+  <article>
+    <h2 style="text-align: center;">2022 - W01</h2>
+    <textarea id="w3review" name="w3review" rows="4" cols="50">
+NOTES: How to Use ES6 Arguments and Parameters
+
+apply() method: The first argument is the function Math, then the array we need to evaluate.
+Using apply() method the array is send as individual number. This is an old version.
+
+spread operator expands the array to create individual values for the function.
+The spread operator (...myArray), is set inmediately any array.
+    // sample 1
+    var params = [10, 15];
+    myFunction(5, ...params, 20, ...[25]);    // 5 10 15 20 25
+    // sample 2
+    new Date(...[2016, 5, 6]);    // Mon Jun 06 2016 00:00:00 GMT-0700 (Pacific Daylight Time)
+
+When spread is use in the arguments (create individual values) and 
+rest in the parameters (turns them into an array).
+    //
+    function myFunction(...options) {
+            return options;
+    }
+    myFunction('a', 'b', 'c');      // ["a", "b", "c"]
+
+    //
+    function checkSubstrings(string, ...keys) {
+    for (var key of keys) {
+        if (string.indexOf(key) === -1) {
+        return false;
+        }
+    }
+    return true;
+    }
+    checkSubstrings('this is a string', 'is', 'this');   // true
+
+Parameter string is filled with the argument that is passed first, but the rest of the arguments are put in an array and assigned to the variable keys.
+Nevertheless, the rest parameter is not without its limitations. For example, it must be the last argument; otherwise, a syntax error will occur.
+Another limitation is that only one rest parameter is allowed in the function declaration.
+
+DEFAULT PARAMETERS IN ECMASCRIPT 6
+
+We can now put default values right in the function declaration:
+function foo(a = 10, b = 10) {
+console.log(a, b);
+}
+foo(5);    // 5 10
+foo(0, null);    // 0 null
+
+We can also call a function as a default parameter:
+function multiply(param1, param2 = getParam()) {
+    return param1 * param2;
+}
+
+Refer to other parameters and variables in the fuction declaration:
+function myFunction(a=10, b=a) {
+    console.log('a = ' + a + '; b = '  + b);
+}
+
+Even perform operations in the function declaration:
+function myFunction(a, b = ++a, c = a*b) {
+    console.log(c);
+}
+
+
+Destructuring
+function initiateTransfer({protocol, port, delay, retries, timeout, log}) {
+    // code to initiate transfer
+};
+var options = {
+protocol: 'http',
+port: 800,
+delay: 150,
+retries: 10,
+timeout: 500,
+log: true
+}
+initiateTransfer(options);
+
+
+To prevent this error when parameters are missing, we need to assign a default value to destructured parameters:
+function initiateTransfer({protocol, port, delay, retries, timeout, log} = {}) {
+    // code to initiate transfer
+}
+initiateTransfer();    // no error
+
+
+We can also assign a default value to each destructured parameter:
+function initiateTransfer({
+    protocol = 'http',
+    port = 800,
+    delay = 150,
+    retries = 10,
+    timeout = 500,
+    log = true
+}) {
+    // code to initiate transfer
+}
+
+
+The number of arguments and parameters can differ in two ways:
+Fewer arguments than parameters.
+The missing parameters will equal undefined.
+More arguments than parameters.
+The extra parameters will be ignored but can be retrieved via the special array-like variable arguments (discussed next).
+
+
+Mandatory Arguments
+
+In ECMAScript 6, we can take this further and use default parameters to set mandatory arguments:
+function throwError() {
+    throw new Error('Missing parameter');
+}
+function foo(param1 = throwError(), param2 = throwError()) {
+    // do something
+}
+foo(10, 20);    // ok
+foo(10);   // Error: missing parameter
+
+
+Arguments Object
+
+The arguments object is an array-like object that is available within all functions. It allows the argument’s values passed to the function to be retrieved by number, rather than by name. The object allows us to pass any number of arguments to a function. Consider the following code fragment:
+
+function checkParams(param1) {
+    console.log(param1);    // 2
+    console.log(arguments[0], arguments[1]);    // 2 3
+    console.log(param1 + arguments[0]);    // 2 + 2
+}
+checkParams(2, 3);
+
+
+The arguments object contains an entry for each argument passed to the function, and the index of the first entry starts at 0. If we wanted to access more arguments in the example above, we would write arguments[2], arguments[3] and so on.
+We could even skip setting named parameters altogether and just use the arguments object:
+
+function checkParams() {
+    console.log(arguments[1], arguments[0], arguments[2]);
+}
+checkParams(2, 4, 6);  // 4 2 6
+
+
+The arguments object is an array-like object, but it lacks array methods such as slice() and foreach(). In order to use array methods on the arguments object, the object first needs to be converted into a real array:
+function sort() {
+    var a = Array.prototype.slice.call(arguments);
+    return a.sort();
+}
+sort(40, 20, 50, 30);    // [20, 30, 40, 50]
+    </textarea>
+  </article>
+</section>
+
+<footer>
+  <p>Welcome</p>
+</footer>
+</body>
+</html>
