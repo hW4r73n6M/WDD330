@@ -61,6 +61,13 @@
     text-align: center;
     color: white;
   }
+
+  .example {
+    border: solid;
+    border-width: 1px;
+    border-color: black;
+    background-color: burlywood;
+  }
   
   /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
   @media (max-width: 600px) {
@@ -75,6 +82,7 @@
 <header>
   <h1 style="text-align: center;">WDD330 Notes from the readings</h1>
 </header>
+
 <section>
   <nav>
     <ul>
@@ -87,156 +95,137 @@
   
   <article>
     <h2 style="text-align: center;">2022 - W01</h2>
-    <textarea id="w3review" name="w3review" rows="4" cols="50">
-NOTES: How to Use ES6 Arguments and Parameters
+    <h1>NOTES: How to Use ES6 Arguments and Parameters</h1>
 
-apply() method: The first argument is the function Math, then the array we need to evaluate.
-Using apply() method the array is send as individual number. This is an old version.
+    <h3>Spread Operator (…)</h3>
+    <p>In ECMAScript 5, the apply() method: The first argument is the function Math, then the array we need to evaluate.
+      Using apply() method the array is send as individual number. This is an old version.</p>
+    <p>spread operator expands the array to create individual values for the function.
+      The spread operator (...myArray), is set inmediately any array.</p>
+    <p class="example">
+      function myFunction() {<br>
+        for(var i in arguments){<br>
+          console.log(arguments[i]);<br>
+        }<br>
+      }<br>
+      var params = [10, 15];<br>
+      myFunction(5, ...params, 20, ...[25]);    // 5 10 15 20 25</p>
+    <p class="example">new Date(...[2016, 5, 6]);    // Mon Jun 06 2016 00:00:00 GMT-0700 (Pacific Daylight Time)</p>
 
-spread operator expands the array to create individual values for the function.
-The spread operator (...myArray), is set inmediately any array.
-    // sample 1
-    var params = [10, 15];
-    myFunction(5, ...params, 20, ...[25]);    // 5 10 15 20 25
-    // sample 2
-    new Date(...[2016, 5, 6]);    // Mon Jun 06 2016 00:00:00 GMT-0700 (Pacific Daylight Time)
+    <h3>Rest Parameters</h3>
+    <p>When <b>spread</b> is use in the arguments (create individual values) and 
+      <b>rest</b> in the parameters (turns them into an array).</p>    
+    <p class="example">function myFunction(...options) { <br>
+      return options; <br>
+      } <br>
+      myFunction('a', 'b', 'c');      // ["a", "b", "c"]</p>
+    <p class="example">    function checkSubstrings(string, ...keys) { <br>
+      for (var key of keys) { <br>
+          if (string.indexOf(key) === -1) { <br>
+          return false; <br>
+          } <br>
+      } <br>
+      return true; <br>
+      } <br>
+      checkSubstrings('this is a string', 'is', 'this');   // true</p>
+    <p>Parameter string is filled with the argument that is passed first, but the rest of the arguments are put in an array and assigned to the variable keys.
+      Nevertheless, the rest parameter is not without its limitations. For example, it must be the last argument; otherwise, a syntax error will occur.
+      Another limitation is that only one rest parameter is allowed in the function declaration.</p>
 
-When spread is use in the arguments (create individual values) and 
-rest in the parameters (turns them into an array).
-    //
-    function myFunction(...options) {
-            return options;
-    }
-    myFunction('a', 'b', 'c');      // ["a", "b", "c"]
+    <h3>DEFAULT PARAMETERS IN ECMASCRIPT 6</h3>
+    <p>We can now put default values right in the function declaration:</p>
+    <p class="example">function foo(a = 10, b = 10) { <br>
+      console.log(a, b); <br>
+      } <br>
+      foo(5);    // 5 10 <br>
+      foo(0, null);    // 0 null</p>
+    <p>We can also call a function as a default parameter:</p>
+    <p class="example">function multiply(param1, param2 = getParam()) { <br>
+      return param1 * param2; <br>
+      }</p>
+    <p>Refer to other parameters and variables in the fuction declaration:</p>
+    <p class="example">function myFunction(a=10, b=a) { <br>
+      console.log('a = ' + a + '; b = '  + b); <br>
+      }</p>
+    <p>Even perform operations in the function declaration:</p>
+    <p class="example">function myFunction(a, b = ++a, c = a*b) { <br>
+      console.log(c); <br>
+      }</p>
 
-    //
-    function checkSubstrings(string, ...keys) {
-    for (var key of keys) {
-        if (string.indexOf(key) === -1) {
-        return false;
-        }
-    }
-    return true;
-    }
-    checkSubstrings('this is a string', 'is', 'this');   // true
+    <h3>Destructuring</h3>
+    <p>Destructuring is a new feature in ECMAScript 6 that enables us to extract values from arrays and object and to assign them to variables using a syntax that is similar to object and array literals.</p>
+    <p class="example">function initiateTransfer({protocol, port, delay, retries, timeout, log}) { <br>
+      // code to initiate transfer <br>
+      }; <br>
+      var options = { <br>
+      protocol: 'http', <br>
+      port: 800, <br>
+      delay: 150, <br>
+      retries: 10, <br>
+      timeout: 500, <br>
+      log: true <br>
+      } <br>
+      initiateTransfer(options);</p>
+    <p>To prevent this error when parameters are missing, we need to assign a default value to destructured parameters:</p>
+    <p class="example">function initiateTransfer({protocol, port, delay, retries, timeout, log} = {}) { <br>
+          // code to initiate transfer <br>
+      } <br>
+      initiateTransfer();    // no error</p>
+    <p>We can also assign a default value to each destructured parameter:</p>
+    <p class="example">function initiateTransfer({ <br>
+          protocol = 'http', <br>
+          port = 800, <br>
+          delay = 150, <br>
+          retries = 10, <br>
+          timeout = 500, <br>
+          log = true <br>
+      }) { <br>
+          // code to initiate transfer <br>
+      }</p>
+    <p>The number of arguments and parameters can differ in two ways: <br>
+      <b>Fewer arguments than parameters.</b> <br>
+      The missing parameters will equal undefined. <br>
+    <b>More arguments than parameters.</b> <br>
+      The extra parameters will be ignored but can be retrieved via the special array-like variable arguments (discussed next).</p>
+    
+    <h3>Mandatory Arguments</h3>
+    <p>In ECMAScript 6, we can take this further and use default parameters to set mandatory arguments:</p>
+    <p class="example">function throwError() { <br>
+      throw new Error('Missing parameter'); <br>
+      } <br>
+      function foo(param1 = throwError(), param2 = throwError()) { <br>
+          // do something <br>
+      } <br>
+      foo(10, 20);    // ok <br>
+      foo(10);   // Error: missing parameter</p>
 
-Parameter string is filled with the argument that is passed first, but the rest of the arguments are put in an array and assigned to the variable keys.
-Nevertheless, the rest parameter is not without its limitations. For example, it must be the last argument; otherwise, a syntax error will occur.
-Another limitation is that only one rest parameter is allowed in the function declaration.
-
-DEFAULT PARAMETERS IN ECMASCRIPT 6
-
-We can now put default values right in the function declaration:
-function foo(a = 10, b = 10) {
-console.log(a, b);
-}
-foo(5);    // 5 10
-foo(0, null);    // 0 null
-
-We can also call a function as a default parameter:
-function multiply(param1, param2 = getParam()) {
-    return param1 * param2;
-}
-
-Refer to other parameters and variables in the fuction declaration:
-function myFunction(a=10, b=a) {
-    console.log('a = ' + a + '; b = '  + b);
-}
-
-Even perform operations in the function declaration:
-function myFunction(a, b = ++a, c = a*b) {
-    console.log(c);
-}
-
-
-Destructuring
-function initiateTransfer({protocol, port, delay, retries, timeout, log}) {
-    // code to initiate transfer
-};
-var options = {
-protocol: 'http',
-port: 800,
-delay: 150,
-retries: 10,
-timeout: 500,
-log: true
-}
-initiateTransfer(options);
-
-
-To prevent this error when parameters are missing, we need to assign a default value to destructured parameters:
-function initiateTransfer({protocol, port, delay, retries, timeout, log} = {}) {
-    // code to initiate transfer
-}
-initiateTransfer();    // no error
-
-
-We can also assign a default value to each destructured parameter:
-function initiateTransfer({
-    protocol = 'http',
-    port = 800,
-    delay = 150,
-    retries = 10,
-    timeout = 500,
-    log = true
-}) {
-    // code to initiate transfer
-}
-
-
-The number of arguments and parameters can differ in two ways:
-Fewer arguments than parameters.
-The missing parameters will equal undefined.
-More arguments than parameters.
-The extra parameters will be ignored but can be retrieved via the special array-like variable arguments (discussed next).
-
-
-Mandatory Arguments
-
-In ECMAScript 6, we can take this further and use default parameters to set mandatory arguments:
-function throwError() {
-    throw new Error('Missing parameter');
-}
-function foo(param1 = throwError(), param2 = throwError()) {
-    // do something
-}
-foo(10, 20);    // ok
-foo(10);   // Error: missing parameter
-
-
-Arguments Object
-
-The arguments object is an array-like object that is available within all functions. It allows the argument’s values passed to the function to be retrieved by number, rather than by name. The object allows us to pass any number of arguments to a function. Consider the following code fragment:
-
-function checkParams(param1) {
-    console.log(param1);    // 2
-    console.log(arguments[0], arguments[1]);    // 2 3
-    console.log(param1 + arguments[0]);    // 2 + 2
-}
-checkParams(2, 3);
-
-
-The arguments object contains an entry for each argument passed to the function, and the index of the first entry starts at 0. If we wanted to access more arguments in the example above, we would write arguments[2], arguments[3] and so on.
-We could even skip setting named parameters altogether and just use the arguments object:
-
-function checkParams() {
-    console.log(arguments[1], arguments[0], arguments[2]);
-}
-checkParams(2, 4, 6);  // 4 2 6
-
-
-The arguments object is an array-like object, but it lacks array methods such as slice() and foreach(). In order to use array methods on the arguments object, the object first needs to be converted into a real array:
-function sort() {
-    var a = Array.prototype.slice.call(arguments);
-    return a.sort();
-}
-sort(40, 20, 50, 30);    // [20, 30, 40, 50]
-    </textarea>
+    <h3>Arguments Object</h3>
+    <p>The arguments object is an array-like object that is available within all functions. It allows the argument’s values passed to the function to be retrieved by number, rather than by name. The object allows us to pass any number of arguments to a function. Consider the following code fragment:</p>
+    <p class="example">function checkParams(param1) { <br>
+          console.log(param1);    // 2 <br>
+          console.log(arguments[0], arguments[1]);    // 2 3 <br>
+          console.log(param1 + arguments[0]);    // 2 + 2 <br>
+      } <br>
+      checkParams(2, 3);</p>
+    <p>The arguments object contains an entry for each argument passed to the function, and the index of the first entry starts at 0. If we wanted to access more arguments in the example above, we would write arguments[2], arguments[3] and so on. <br>
+      We could even skip setting named parameters altogether and just use the arguments object:</p>
+    <p class="example">function checkParams() { <br>
+          console.log(arguments[1], arguments[0], arguments[2]); <br>
+      } <br>
+      checkParams(2, 4, 6);  // 4 2 6</p>
+    <p>The arguments object is an array-like object, but it lacks array methods such as slice() and foreach(). In order to use array methods on the arguments object, the object first needs to be converted into a real array:</p>
+    <p class="example">function sort() { <br>
+          var a = Array.prototype.slice.call(arguments); <br>
+          return a.sort(); <br>
+      } <br>
+      sort(40, 20, 50, 30);    // [20, 30, 40, 50]</p>
   </article>
 </section>
 
+<!-- 
 <footer>
   <p>Welcome</p>
-</footer>
+</footer> 
+-->
 </body>
 </html>
