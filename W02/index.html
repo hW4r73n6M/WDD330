@@ -94,131 +94,180 @@
   </nav>
   
   <article>
-    <h2 style="text-align: center;">2022 - W01</h2>
-    <h1>NOTES: How to Use ES6 Arguments and Parameters</h1>
+    <h2 style="text-align: center;">2022 - W02</h2>
+    <h1>L03 - NOTES: The Window Object</h1>
 
-    <h3>Spread Operator (…)</h3>
-    <p>In ECMAScript 5, the apply() method: The first argument is the function Math, then the array we need to evaluate.
-      Using apply() method the array is send as individual number. This is an old version.</p>
-    <p>spread operator expands the array to create individual values for the function.
-      The spread operator (...myArray), is set inmediately any array.</p>
+    <h3>The Browser Object Model</h3>
+    <p>The Browser Object Model (or BOM for short) is a collection of properties and methods that contain information about the browser and computer screen.</p>
+    <p>There is no official standard for the BOM, although there are a number of properties and methods that are supported by all the major browsers, making a sort of de facto standard. These properties and methods are made available through the window object. Every browser window, tab, popup, frame, and iframe has a window object.</p>
+    <h4>The BOM Only Makes Sense in a Browser Environment</h4>
+    <p>If you don’t know the name of the global object, you can also refer to it using the keyword this in the global scope. The following code provides a quick way of assigning the variable global to the global object:</p>
     <p class="example">
-      function myFunction() {<br>
-        for(var i in arguments){<br>
-          console.log(arguments[i]);<br>
+      // from within the global scope<br>
+      const global = this;
+    </p>
+    <h4>Going Global</h4>
+    <p>Global variables are actual properties of a global object. In a browser environment, the global object is the window object.</p>
+    <p class="example">
+      x = 6;  // global variable created<br>
+      << 6
+      <br><br>
+      window.x // same variable can be accessed as a property of the window object<br>
+      << 6
+      <br><br>
+      // both variables are exactly the same<br>
+      window.x === x;<br>
+      << true
+    </p>
+    <h5>Location, Location, Location</h5>
+    <p>The window.location property is an object that contains information about the URL of the current page. It contains a number of properties that provide information about different fragments of the URL</p>
+    <ul>
+      <li>href</li>
+      <li>protocol</li>
+      <li>host</li>
+      <li>hostname</li>
+      <li>port</li>
+      <li>pathname</li>
+      <li>search</li>
+      <li>hash</li>
+      <li>origin</li>
+      <li>reload() or reload(true) force reload from the server</li>
+      <li>assign</li>
+      <li>replace, is almost the same as the assign() method, except the current page will not be stored in the session history, so the user will be unable to navigate back to it using the back button.</li>
+      <li>ToString()</li>
+    </ul>
+    <h5>The Browser History</h5>
+    <ul>
+      <li>history</li>
+      <li>history.length</li>
+      <li>history.go</li>
+    </ul>
+    <p class="example">
+      window.history.go(1) // goes forward 1 page, there are also the windows.history.forward()<br>
+	    window.history.go(0) // reloads the current page<br>
+    	window.history.go(-1) // goes back 1 page, there are also the windows.history.backward()
+    </p>
+    <h5>Controlling Windows</h5>
+    <p>A new window can be opened using the window.open() method. This takes the URL of the page to be opened as its first parameter, the window title as its second parameter, and a list of attributes as the third parameter. This can also be assigned to a variable, so the window can then be referenced later in the code:</p>
+    <p class="example">
+      const popup = window.open('https://sitepoint.com','SitePoint','width=400,height=400,resizable=yes');
+    </p>
+    <p>The close() method can be used to close a window, assuming you have a reference to it:</p>
+    <p class="example">
+      popup.close();
+      <br><br>
+      window.moveTo(0,0); // will move the window to the top-left corner of the screen
+      <br><br>
+      window.resizeTo(600,400);
+    </p>
+    <h5>Screen Information</h5>
+    <p>The window.screen object contains information about the screen the browser is displayed on. You can find out the height and width of the screen in pixels using the height and width properties respectively:</p>
+    <p class="example">
+      //find out the height and width of the screen in pixels
+      window.screen.height
+      << 1024
+      <br><br>
+      window.screen.width
+      << 1280
+      <br><br>
+      //used to find the height and width of the screen
+      window.screen.availWidth
+      << 1280
+      <br><br>
+      window.screen.availHeight
+      << 995
+    </p>
+    <h5>Cookies</h5>
+    <p>
+      Cookies are small files that are saved locally on a user’s computer. <br>
+      A restriction of cookies is that they can only be read by a web page from the same domain that set them. This is to stop sites being able to access information about users, such as other sites they have visited. Cookies are also limited to storing up to 4KB of data, although 20 cookies are allowed per domain, which can add up to quite a lot of data.<br>
+      Cookies can be used for personalizing a user’s browsing experience, storing user preferences, keeping track of user choices (such as a shopping cart), authentication and tracking users.<br><br>
+      For example, a cookie file might contain the following information:
+    </p>
+    <p class="example">
+      "name=Superman; hero=true; city=Metropolis"
+    </p>
+    <p>Creating Cookies & Changing Cookie Values</p>
+    <p class="example">
+      document.cookie = 'name=Superman';<br>
+      << "name=Superman"
+    </p>
+    <p>We can use the split method to break the string into an array containing each name/value pair, then use a for of loop to iterate through the array:</p>
+    <p class="example">
+      const cookies = document.cookie.split("; ");<br>
+      for (crumb of cookies){<br>
+          const [key,value] = crumb.split("=");<br>
+          console.log(`The value of ${key} is ${value}`);<br>
+      }<br><br>
+      << The value of name is Batman<br><br>
+      The value of hero is true<br>
+      The value of city is Gotham
+    </p>
+    <h5>Cookies Expiry Dates</h5>
+    <p class="example">
+      const expiryDate = new Date(); <br>
+      const tomorrow = expiryDate.getTime() + 1000 * 60 * 60 * 24;<br>
+      expiryDate.setTime(tomorrow);<br><br>
+      document.cookie = `name=Batman; expires=${ expiryDate.toUTCString()}`;
+    </p>
+    <h5>The Path and Domain of Cookies</h5>
+    <p>By default, cookies can only be read by pages inside the same directory and domain as the file was set. This is for security reasons so that access to the cookie is limited.</p>
+    <p>The path can be changed so that any page in the root directory can read the cookie. It’s done by adding the string ; path=/ to the end of the cookie when it is set:
+      document.cookie = 'name=Batman; path=/'</p>
+    <p>It’s also possible to set the domain by adding "; domain=domainName" to the end of the cookie:</p>
+    <p class="example">
+      document.cookie = 'name=Batman; domain=sitepoint.com';
+    </p>
+    <h5>Secure Cookies</h5>
+    <p>Adding the string ; secure to the end of a cookie will ensure it’s only transmitted over a secure HTTPS network:</p>
+    <p class="example">
+      document.cookie = 'name=Batman; secure';
+    </p>
+    <h5>Deleting Cookies</h5>
+    <p>To remove a cookie, you need to set it to expire at a time in the past:</p>
+    <p class="example">
+      document.cookie = 'name=Batman; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    </p>
+    <h5>Timing Function</h5>    
+    <p>setTimeout()</p>
+    <p>The window object provides some useful methods for scheduling the execution of a function, and for repeatedly executing functions at regular intervals.</p>
+    <p class="example">
+      window.setTimeout( () => alert("Time's Up!"), 3000);<br>
+      << 4
+    </p>
+    <p>Notice that the method returns an integer. This is an ID used to reference that particular timeout. It can also cancel the timeout using the window.clearTimeout() method. Try calling the code again and make a note of the number that is returned:</p>
+    <p class="example">
+      window.clearTimeout(4);<br>
+      << undefined
+    </p>
+    <h5>setInterval()</h5>
+    <p>The window.setInterval() method works in a similar way to window.setTimeout(), except that it will repeatedly invoke the callback function after every given number of milliseconds.</p>
+    <p class="example">
+      function chant(){ console.log('Beetlejuice'); }
+    </p>
+    <p>Now we can set up the interval and assign it to a variable:</p>
+    <p class="example">
+      const summon = window.setInterval(chant,1000);<br>
+      << 6<br><br>
+      window.clearInterval(summon);<br><br><br>
+      const person = {<br>
+        name: 'Superman',<br>
+        introduce() { <br>
+            console.log(`Hi, I'm ${this.name}`);<br>
         }<br>
-      }<br>
-      var params = [10, 15];<br>
-      myFunction(5, ...params, 20, ...[25]);    // 5 10 15 20 25</p>
-    <p class="example">new Date(...[2016, 5, 6]);    // Mon Jun 06 2016 00:00:00 GMT-0700 (Pacific Daylight Time)</p>
+      };<br><br>
+                      
+      setTimeout(person.introduce, 50);<br>
+      << Hi, I'm<br>
+    </p>
 
-    <h3>Rest Parameters</h3>
-    <p>When <b>spread</b> is use in the arguments (create individual values) and 
-      <b>rest</b> in the parameters (turns them into an array).</p>    
-    <p class="example">function myFunction(...options) { <br>
-      return options; <br>
-      } <br>
-      myFunction('a', 'b', 'c');      // ["a", "b", "c"]</p>
-    <p class="example">    function checkSubstrings(string, ...keys) { <br>
-      for (var key of keys) { <br>
-          if (string.indexOf(key) === -1) { <br>
-          return false; <br>
-          } <br>
-      } <br>
-      return true; <br>
-      } <br>
-      checkSubstrings('this is a string', 'is', 'this');   // true</p>
-    <p>Parameter string is filled with the argument that is passed first, but the rest of the arguments are put in an array and assigned to the variable keys.
-      Nevertheless, the rest parameter is not without its limitations. For example, it must be the last argument; otherwise, a syntax error will occur.
-      Another limitation is that only one rest parameter is allowed in the function declaration.</p>
 
-    <h3>DEFAULT PARAMETERS IN ECMASCRIPT 6</h3>
-    <p>We can now put default values right in the function declaration:</p>
-    <p class="example">function foo(a = 10, b = 10) { <br>
-      console.log(a, b); <br>
-      } <br>
-      foo(5);    // 5 10 <br>
-      foo(0, null);    // 0 null</p>
-    <p>We can also call a function as a default parameter:</p>
-    <p class="example">function multiply(param1, param2 = getParam()) { <br>
-      return param1 * param2; <br>
-      }</p>
-    <p>Refer to other parameters and variables in the fuction declaration:</p>
-    <p class="example">function myFunction(a=10, b=a) { <br>
-      console.log('a = ' + a + '; b = '  + b); <br>
-      }</p>
-    <p>Even perform operations in the function declaration:</p>
-    <p class="example">function myFunction(a, b = ++a, c = a*b) { <br>
-      console.log(c); <br>
-      }</p>
 
-    <h3>Destructuring</h3>
-    <p>Destructuring is a new feature in ECMAScript 6 that enables us to extract values from arrays and object and to assign them to variables using a syntax that is similar to object and array literals.</p>
-    <p class="example">function initiateTransfer({protocol, port, delay, retries, timeout, log}) { <br>
-      // code to initiate transfer <br>
-      }; <br>
-      var options = { <br>
-      protocol: 'http', <br>
-      port: 800, <br>
-      delay: 150, <br>
-      retries: 10, <br>
-      timeout: 500, <br>
-      log: true <br>
-      } <br>
-      initiateTransfer(options);</p>
-    <p>To prevent this error when parameters are missing, we need to assign a default value to destructured parameters:</p>
-    <p class="example">function initiateTransfer({protocol, port, delay, retries, timeout, log} = {}) { <br>
-          // code to initiate transfer <br>
-      } <br>
-      initiateTransfer();    // no error</p>
-    <p>We can also assign a default value to each destructured parameter:</p>
-    <p class="example">function initiateTransfer({ <br>
-          protocol = 'http', <br>
-          port = 800, <br>
-          delay = 150, <br>
-          retries = 10, <br>
-          timeout = 500, <br>
-          log = true <br>
-      }) { <br>
-          // code to initiate transfer <br>
-      }</p>
-    <p>The number of arguments and parameters can differ in two ways: <br>
-      <b>Fewer arguments than parameters.</b> <br>
-      The missing parameters will equal undefined. <br>
-    <b>More arguments than parameters.</b> <br>
-      The extra parameters will be ignored but can be retrieved via the special array-like variable arguments (discussed next).</p>
-    
-    <h3>Mandatory Arguments</h3>
-    <p>In ECMAScript 6, we can take this further and use default parameters to set mandatory arguments:</p>
-    <p class="example">function throwError() { <br>
-      throw new Error('Missing parameter'); <br>
-      } <br>
-      function foo(param1 = throwError(), param2 = throwError()) { <br>
-          // do something <br>
-      } <br>
-      foo(10, 20);    // ok <br>
-      foo(10);   // Error: missing parameter</p>
 
-    <h3>Arguments Object</h3>
-    <p>The arguments object is an array-like object that is available within all functions. It allows the argument’s values passed to the function to be retrieved by number, rather than by name. The object allows us to pass any number of arguments to a function. Consider the following code fragment:</p>
-    <p class="example">function checkParams(param1) { <br>
-          console.log(param1);    // 2 <br>
-          console.log(arguments[0], arguments[1]);    // 2 3 <br>
-          console.log(param1 + arguments[0]);    // 2 + 2 <br>
-      } <br>
-      checkParams(2, 3);</p>
-    <p>The arguments object contains an entry for each argument passed to the function, and the index of the first entry starts at 0. If we wanted to access more arguments in the example above, we would write arguments[2], arguments[3] and so on. <br>
-      We could even skip setting named parameters altogether and just use the arguments object:</p>
-    <p class="example">function checkParams() { <br>
-          console.log(arguments[1], arguments[0], arguments[2]); <br>
-      } <br>
-      checkParams(2, 4, 6);  // 4 2 6</p>
-    <p>The arguments object is an array-like object, but it lacks array methods such as slice() and foreach(). In order to use array methods on the arguments object, the object first needs to be converted into a real array:</p>
-    <p class="example">function sort() { <br>
-          var a = Array.prototype.slice.call(arguments); <br>
-          return a.sort(); <br>
-      } <br>
-      sort(40, 20, 50, 30);    // [20, 30, 40, 50]</p>
+
+
+
+    <br><br>
   </article>
 </section>
 
