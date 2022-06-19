@@ -260,14 +260,121 @@
       setTimeout(person.introduce, 50);<br>
       << Hi, I'm<br>
     </p>
+    <br><br><br>
+    
+    <h1>L04 - NOTES: How Single-Page Applications Work & Template Element</h1>
 
+    <h3>Single-Page</h3>
+    <p>A single-page application (SPA) is a website that re-renders its content in response to navigation actions (e.g. clicking a link) without making a request to the server to fetch new HTML.</p>
+    <p>While single-page application implementations vary, most rely on the same browser behavior and native APIs to enable the core functionality.</p>
 
+    <h4>What Type of SPA?</h4>
+    <p>Single-page applications can use state from an external source (i.e. the URL location) or track state internally.</p>
+    <p>Internal state SPAs are limited because there is only one “entry”. A single entry means that you always start at the root when you enter the application.</p>
+    <p>With location-based SPAs, you can share a link and be confident that anyone opening that link will see the same thing as you because the location is always updating as you navigate (assuming they have the same authorization to view the content).</p>
 
+    <h4>Location Primer</h4>
+    <p>While the URL in the address bar is what users see and interact with, SPAs use window.location. This allows you to interact with the different parts of the URL without having to parse it yourself.</p>
+    <p>Only three of the location object’s properties are important for an SPA: pathname, hash, and search (commonly called a query string). With single-page applications, navigation to any location outside of the application is performed regularly (e.g. click an anchor and let the browser handle it), so the hostname and protocol can be ignored.</p>
+    <p>The pathname is typically the most important of these three properties because it is the one used for determining what content to render.</p>
 
+    <h4>Route Matching</h4>
+    <p>Single-page application generally rely on a router.</p>
+    <p>Routers are made up of routes, which describe the location that they should match. These can be static (/about) or dynamic (/album/:id, where the value of :id can be any number of possibilities) paths. The path-to-regexp package is a very popular solution for creating these paths.</p>
+    <p class="example">
+      const routes = [<br>
+        { path: '/' },<br>
+        { path: '/about' },<br>
+        { path: '/album/:id' }<br>
+      ];
+    </p>
+    <p>After matching a route, the router will trigger a re-render of the application.</p>
 
+    <h4>In-App Navigation</h4>
+    <p>Navigation is the more interesting problem. When you click an anchor, the browser has native behavior attached to the event to trigger navigation. However, you can also attach your own click handler and override the native behavior (using event.preventDefault() in modern browsers). Without the native behavior the location will not change, so it is up to the click handler to trigger the navigation.</p>
 
+    <h4>Navigating in SPAs using the History API</h4>
+    <p>How do single-page applications take advantage of the History API? We can add a click handler to anchors that overrides the native behavior using event.preventDefault(). The handler can call history.pushState()/history.replaceState() to perform the navigation without triggering a server request. </p>
+    <p>However, the History API is only updating the session history, so the handler will also need to interact with the router to let it know the new location. Many routers use a History API wrapper to merge these steps.</p>
+    <p>For more vanilla implementations, you could add a global event listener for clicks that detects in-app navigations, overrides the default behavior, and replaces it with a History API call.</p>
+    <p>Actual implementations are slightly more complicated because not all clicks should be overridden. If the user does a modified click (clicks while holding the ctrl, alt, shift, or meta keys), we want the browser to handle the navigation. The same goes for an anchor with a target attribute.</p>
+    <p>The History API combined with overriding native click behavior makes in-app navigation easy. However, we have another type of navigation to worry about: a user pressing the browser’s forward and back buttons.</p>
 
-    <br><br>
+    <h4>Detecting back/forward button navigation</h4>
+    <p>When the back and forward buttons are clicked (as well as when history.go() is called), the browser emits a popstate event. In order to detect these, we can add an event listener to the window object.</p>
+    <p class="example">
+      window.addEventListener('popstate', event => {<br>
+        // let the router know navigation happened!<br>
+      }, false);
+    </p>
+
+    <p>>The session history will already be updated by the time the event listener is called, so all we need to do is let the router know that the location has changed.</p>
+
+    <h4>Manually navigating with the address bar</h4>
+    <p>If a user updates the location manually using the address bar, that navigation will create a new Document. The History API only prevents reloads with entries that share the same Document. This means that calling history.go() and clicking the forward/back buttons to navigate between them will cause full page reloads!</p>
+
+    <h4>What exactly is the &lt;template&gt; element?</h4>
+    <p>Put simply, it provides an easy way to define a reusable fragment of HTML that can be manipulated just like you would the contents of the document itself, but without the overhead of actually updating the DOM or having to compile and parse strings of HTML.</p>
+
+    <p>Anything inside of a &lt;template&gt; tag gets parsed just like regular HTML, except:</p>
+    <ul>
+      <li>It doesn't get rendered</li>
+      <li>&lt;script&gt; tags inside of it don't get run</li>
+      <li>&lt;style&gt; tags inside of it don't get evaluated</li>
+      <li>It doesn't load any external resources (so you won't see any requests for the contents of &lt;img&gt; or &lt;embed&gt; tags)</li>
+      <li>It can be accessed as a DocumentFragment instance via the special content property of the &lt;template&gt; element</li>
+    </ul>
+
+    <p>This is where the DocumentFragment class having an interface almost the same as the global document object comes in. With this, you can call querySelector on the fragment just like you would to find elements in the page, and get a real Element or NodeList back that you can then manipulate just like if you had requested elements in the page itself.</p>
+    <p>Consider the following example code:</p>
+    <p class="example">
+      &lt;template id='modalTemplate'&gt;<br>
+        &lt;div class='modal fade' tabindex='-1' role='dialog' aria-hidden='true'&gt;<br>
+            &lt;div class='modal-dialog' role='document'&gt;<br>
+                &lt;div class='modal-content'&gt;<br>
+                    &lt;div class='modal-header'&gt;<br>
+                        &lt;h5 class='modal-title'&gt;&lt;/h5&gt;<br>
+                        &lt;button type='button' class='close' data-dismiss='modal' aria-label='close'&gt;<br>
+                            &lt;span aria-hidden='true'&gt;&times;&lt;/span&gt;<br>
+                        &lt;/button&gt;<br>
+                    &lt;/div&gt;<br>
+                    &lt;div class='modal-body'&gt;&lt;/div&gt;<br>
+                    &lt;div class='modal-footer'&gt;<br>
+                        &lt;button type='button' class='btn btn-secondary' data-dismiss='modal'&gt;Close&lt;/button&gt;<br>
+                        &lt;button type='button' class='btn btn-primary'&gt;Save&lt;/button&gt;<br>
+                    &lt;/div&gt;<br>
+                &lt;/div&gt;<br>
+            &lt;/div&gt;<br>
+        &lt;/div&gt;<br>
+    &lt;/template&gt;
+    </p>
+
+    <p>Now our template is a basic skeleton for a Bootstrap 4 modal. Note that there are no ID attributes (or anything that references them) here. Template contents still need to meet the uniqueness requirement for ID attributes across the whole page, so it's safest to just avoid them in the template itself and populate them from your code as you're using the template.</p>
+    <p class="example">
+      const modalTemplate = document.querySelector('#modalTemplate')<br><br>
+
+      function createModal(id, title, body) {<br>
+          const node = modalTemplate.cloneNode(true)<br>
+          const modal = node.querySelector('.modal')<br>
+          const modalTitle = node.querySelector('.modal-title')<br>
+          const modalBody = node.querySelector('.modal-body')<br><br>
+
+          modal.id = id<br>
+          modal.setAttribute('aria-labelledby', `${id}Title`)<br><br>
+
+          modalTitle.id = `${id}Title`<br>
+          modalTitle.textContent = title<br><br>
+
+          modalBody.innerHTML = body<br><br>
+
+          document.body.append(node)<br><br>
+
+          return document.querySelector(`#${id}`)<br>
+      }
+    </p>
+
+    <br><br><br>
+
   </article>
 </section>
 
