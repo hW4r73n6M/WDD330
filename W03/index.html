@@ -94,283 +94,215 @@
   </nav>
   
   <article>
-    <h2 style="text-align: center;">2022 - W02</h2>
-    <h1>L03 - NOTES: The Window Object</h1>
+    <h2 style="text-align: center;">2022 - W03</h2>
+    <h1>L05 - NOTES: CORS (Cross-Origin Resource Sharing)</h1>
 
-    <h3>The Browser Object Model</h3>
-    <p>The Browser Object Model (or BOM for short) is a collection of properties and methods that contain information about the browser and computer screen.</p>
-    <p>There is no official standard for the BOM, although there are a number of properties and methods that are supported by all the major browsers, making a sort of de facto standard. These properties and methods are made available through the window object. Every browser window, tab, popup, frame, and iframe has a window object.</p>
-    <h4>The BOM Only Makes Sense in a Browser Environment</h4>
-    <p>If you don’t know the name of the global object, you can also refer to it using the keyword this in the global scope. The following code provides a quick way of assigning the variable global to the global object:</p>
-    <p class="example">
-      // from within the global scope<br>
-      const global = this;
-    </p>
-    <h4>Going Global</h4>
-    <p>Global variables are actual properties of a global object. In a browser environment, the global object is the window object.</p>
-    <p class="example">
-      x = 6;  // global variable created<br>
-      << 6
-      <br><br>
-      window.x // same variable can be accessed as a property of the window object<br>
-      << 6
-      <br><br>
-      // both variables are exactly the same<br>
-      window.x === x;<br>
-      << true
-    </p>
-    <h5>Location, Location, Location</h5>
-    <p>The window.location property is an object that contains information about the URL of the current page. It contains a number of properties that provide information about different fragments of the URL</p>
+    <h3>What is CORS</h3>
+    <p>CORS is a security mechanism that allows a web page from one domain or Origin to access a resource with a different domain (a cross-domain request).</p>
+    <h3>How CORS works</h3>
+    <p>There are two types of CORS requests, simple requests [https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#simple-requests] and preflighted requests [https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#preflighted-requests].</p>
+    <h4>I. Simple requests</h4>
+    <p>A simple request is a CORS request that doesn’t require a preflight request (preliminary checks) before being initiated.</p>
     <ul>
-      <li>href</li>
-      <li>protocol</li>
-      <li>host</li>
-      <li>hostname</li>
-      <li>port</li>
-      <li>pathname</li>
-      <li>search</li>
-      <li>hash</li>
-      <li>origin</li>
-      <li>reload() or reload(true) force reload from the server</li>
-      <li>assign</li>
-      <li>replace, is almost the same as the assign() method, except the current page will not be stored in the session history, so the user will be unable to navigate back to it using the back button.</li>
-      <li>ToString()</li>
-    </ul>
-    <h5>The Browser History</h5>
-    <ul>
-      <li>history</li>
-      <li>history.length</li>
-      <li>history.go</li>
-    </ul>
-    <p class="example">
-      window.history.go(1) // goes forward 1 page, there are also the windows.history.forward()<br>
-	    window.history.go(0) // reloads the current page<br>
-    	window.history.go(-1) // goes back 1 page, there are also the windows.history.backward()
-    </p>
-    <h5>Controlling Windows</h5>
-    <p>A new window can be opened using the window.open() method. This takes the URL of the page to be opened as its first parameter, the window title as its second parameter, and a list of attributes as the third parameter. This can also be assigned to a variable, so the window can then be referenced later in the code:</p>
-    <p class="example">
-      const popup = window.open('https://sitepoint.com','SitePoint','width=400,height=400,resizable=yes');
-    </p>
-    <p>The close() method can be used to close a window, assuming you have a reference to it:</p>
-    <p class="example">
-      popup.close();
-      <br><br>
-      window.moveTo(0,0); // will move the window to the top-left corner of the screen
-      <br><br>
-      window.resizeTo(600,400);
-    </p>
-    <h5>Screen Information</h5>
-    <p>The window.screen object contains information about the screen the browser is displayed on. You can find out the height and width of the screen in pixels using the height and width properties respectively:</p>
-    <p class="example">
-      //find out the height and width of the screen in pixels
-      window.screen.height
-      << 1024
-      <br><br>
-      window.screen.width
-      << 1280
-      <br><br>
-      //used to find the height and width of the screen
-      window.screen.availWidth
-      << 1280
-      <br><br>
-      window.screen.availHeight
-      << 995
-    </p>
-    <h5>Cookies</h5>
-    <p>
-      Cookies are small files that are saved locally on a user’s computer. <br>
-      A restriction of cookies is that they can only be read by a web page from the same domain that set them. This is to stop sites being able to access information about users, such as other sites they have visited. Cookies are also limited to storing up to 4KB of data, although 20 cookies are allowed per domain, which can add up to quite a lot of data.<br>
-      Cookies can be used for personalizing a user’s browsing experience, storing user preferences, keeping track of user choices (such as a shopping cart), authentication and tracking users.<br><br>
-      For example, a cookie file might contain the following information:
-    </p>
-    <p class="example">
-      "name=Superman; hero=true; city=Metropolis"
-    </p>
-    <p>Creating Cookies & Changing Cookie Values</p>
-    <p class="example">
-      document.cookie = 'name=Superman';<br>
-      << "name=Superman"
-    </p>
-    <p>We can use the split method to break the string into an array containing each name/value pair, then use a for of loop to iterate through the array:</p>
-    <p class="example">
-      const cookies = document.cookie.split("; ");<br>
-      for (crumb of cookies){<br>
-          const [key,value] = crumb.split("=");<br>
-          console.log(`The value of ${key} is ${value}`);<br>
-      }<br><br>
-      << The value of name is Batman<br><br>
-      The value of hero is true<br>
-      The value of city is Gotham
-    </p>
-    <h5>Cookies Expiry Dates</h5>
-    <p class="example">
-      const expiryDate = new Date(); <br>
-      const tomorrow = expiryDate.getTime() + 1000 * 60 * 60 * 24;<br>
-      expiryDate.setTime(tomorrow);<br><br>
-      document.cookie = `name=Batman; expires=${ expiryDate.toUTCString()}`;
-    </p>
-    <h5>The Path and Domain of Cookies</h5>
-    <p>By default, cookies can only be read by pages inside the same directory and domain as the file was set. This is for security reasons so that access to the cookie is limited.</p>
-    <p>The path can be changed so that any page in the root directory can read the cookie. It’s done by adding the string ; path=/ to the end of the cookie when it is set:
-      document.cookie = 'name=Batman; path=/'</p>
-    <p>It’s also possible to set the domain by adding "; domain=domainName" to the end of the cookie:</p>
-    <p class="example">
-      document.cookie = 'name=Batman; domain=sitepoint.com';
-    </p>
-    <h5>Secure Cookies</h5>
-    <p>Adding the string ; secure to the end of a cookie will ensure it’s only transmitted over a secure HTTPS network:</p>
-    <p class="example">
-      document.cookie = 'name=Batman; secure';
-    </p>
-    <h5>Deleting Cookies</h5>
-    <p>To remove a cookie, you need to set it to expire at a time in the past:</p>
-    <p class="example">
-      document.cookie = 'name=Batman; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-    </p>
-    <h5>Timing Function</h5>    
-    <p>setTimeout()</p>
-    <p>The window object provides some useful methods for scheduling the execution of a function, and for repeatedly executing functions at regular intervals.</p>
-    <p class="example">
-      window.setTimeout( () => alert("Time's Up!"), 3000);<br>
-      << 4
-    </p>
-    <p>Notice that the method returns an integer. This is an ID used to reference that particular timeout. It can also cancel the timeout using the window.clearTimeout() method. Try calling the code again and make a note of the number that is returned:</p>
-    <p class="example">
-      window.clearTimeout(4);<br>
-      << undefined
-    </p>
-    <h5>setInterval()</h5>
-    <p>The window.setInterval() method works in a similar way to window.setTimeout(), except that it will repeatedly invoke the callback function after every given number of milliseconds.</p>
-    <p class="example">
-      function chant(){ console.log('Beetlejuice'); }
-    </p>
-    <p>Now we can set up the interval and assign it to a variable:</p>
-    <p class="example">
-      const summon = window.setInterval(chant,1000);<br>
-      << 6<br><br>
-      window.clearInterval(summon);<br><br><br>
-      const person = {<br>
-        name: 'Superman',<br>
-        introduce() { <br>
-            console.log(`Hi, I'm ${this.name}`);<br>
-        }<br>
-      };<br><br>
-                      
-      setTimeout(person.introduce, 50);<br>
-      << Hi, I'm<br>
-    </p>
-    <br><br><br>
-    
-    <h1>L04 - NOTES: How Single-Page Applications Work & Template Element</h1>
-
-    <h3>Single-Page</h3>
-    <p>A single-page application (SPA) is a website that re-renders its content in response to navigation actions (e.g. clicking a link) without making a request to the server to fetch new HTML.</p>
-    <p>While single-page application implementations vary, most rely on the same browser behavior and native APIs to enable the core functionality.</p>
-
-    <h4>What Type of SPA?</h4>
-    <p>Single-page applications can use state from an external source (i.e. the URL location) or track state internally.</p>
-    <p>Internal state SPAs are limited because there is only one “entry”. A single entry means that you always start at the root when you enter the application.</p>
-    <p>With location-based SPAs, you can share a link and be confident that anyone opening that link will see the same thing as you because the location is always updating as you navigate (assuming they have the same authorization to view the content).</p>
-
-    <h4>Location Primer</h4>
-    <p>While the URL in the address bar is what users see and interact with, SPAs use window.location. This allows you to interact with the different parts of the URL without having to parse it yourself.</p>
-    <p>Only three of the location object’s properties are important for an SPA: pathname, hash, and search (commonly called a query string). With single-page applications, navigation to any location outside of the application is performed regularly (e.g. click an anchor and let the browser handle it), so the hostname and protocol can be ignored.</p>
-    <p>The pathname is typically the most important of these three properties because it is the one used for determining what content to render.</p>
-
-    <h4>Route Matching</h4>
-    <p>Single-page application generally rely on a router.</p>
-    <p>Routers are made up of routes, which describe the location that they should match. These can be static (/about) or dynamic (/album/:id, where the value of :id can be any number of possibilities) paths. The path-to-regexp package is a very popular solution for creating these paths.</p>
-    <p class="example">
-      const routes = [<br>
-        { path: '/' },<br>
-        { path: '/about' },<br>
-        { path: '/album/:id' }<br>
-      ];
-    </p>
-    <p>After matching a route, the router will trigger a re-render of the application.</p>
-
-    <h4>In-App Navigation</h4>
-    <p>Navigation is the more interesting problem. When you click an anchor, the browser has native behavior attached to the event to trigger navigation. However, you can also attach your own click handler and override the native behavior (using event.preventDefault() in modern browsers). Without the native behavior the location will not change, so it is up to the click handler to trigger the navigation.</p>
-
-    <h4>Navigating in SPAs using the History API</h4>
-    <p>How do single-page applications take advantage of the History API? We can add a click handler to anchors that overrides the native behavior using event.preventDefault(). The handler can call history.pushState()/history.replaceState() to perform the navigation without triggering a server request. </p>
-    <p>However, the History API is only updating the session history, so the handler will also need to interact with the router to let it know the new location. Many routers use a History API wrapper to merge these steps.</p>
-    <p>For more vanilla implementations, you could add a global event listener for clicks that detects in-app navigations, overrides the default behavior, and replaces it with a History API call.</p>
-    <p>Actual implementations are slightly more complicated because not all clicks should be overridden. If the user does a modified click (clicks while holding the ctrl, alt, shift, or meta keys), we want the browser to handle the navigation. The same goes for an anchor with a target attribute.</p>
-    <p>The History API combined with overriding native click behavior makes in-app navigation easy. However, we have another type of navigation to worry about: a user pressing the browser’s forward and back buttons.</p>
-
-    <h4>Detecting back/forward button navigation</h4>
-    <p>When the back and forward buttons are clicked (as well as when history.go() is called), the browser emits a popstate event. In order to detect these, we can add an event listener to the window object.</p>
-    <p class="example">
-      window.addEventListener('popstate', event => {<br>
-        // let the router know navigation happened!<br>
-      }, false);
-    </p>
-
-    <p>>The session history will already be updated by the time the event listener is called, so all we need to do is let the router know that the location has changed.</p>
-
-    <h4>Manually navigating with the address bar</h4>
-    <p>If a user updates the location manually using the address bar, that navigation will create a new Document. The History API only prevents reloads with entries that share the same Document. This means that calling history.go() and clicking the forward/back buttons to navigate between them will cause full page reloads!</p>
-
-    <h4>What exactly is the &lt;template&gt; element?</h4>
-    <p>Put simply, it provides an easy way to define a reusable fragment of HTML that can be manipulated just like you would the contents of the document itself, but without the overhead of actually updating the DOM or having to compile and parse strings of HTML.</p>
-
-    <p>Anything inside of a &lt;template&gt; tag gets parsed just like regular HTML, except:</p>
-    <ul>
-      <li>It doesn't get rendered</li>
-      <li>&lt;script&gt; tags inside of it don't get run</li>
-      <li>&lt;style&gt; tags inside of it don't get evaluated</li>
-      <li>It doesn't load any external resources (so you won't see any requests for the contents of &lt;img&gt; or &lt;embed&gt; tags)</li>
-      <li>It can be accessed as a DocumentFragment instance via the special content property of the &lt;template&gt; element</li>
+      <li>A browser tab open to https://www.mydomain.com  initiates AJAX request GET https://api.mydomain.com/widgets</li>
+      <li>Along with adding headers like Host, the browser automatically adds the Origin Request Header for cross-origin requests:</li>
+        <p class="example">
+          GET /widgets/ HTTP/1.1<br>
+          Host: api.mydomain.com<br>
+          Origin: https://www.mydomain.com<br>
+          [Rest of request...]
+        </p>
+      <li>The server checks the Origin request header. If the Origin value is allowed, it sets the Access-Control-Allow-Origin to the value in the request header Origin.</li>
+      <p class="example">
+          HTTP/1.1 200 OK  <br>
+          Access-Control-Allow-Origin: https://www.mydomain.com  <br>
+          Content-Type: application/json<br>
+          [Rest of response...] 
+      </p>
+      <li>When the browser receives the response, the browser checks the Access-Control-Allow-Origin header to see if it matches the origin of the tab. If not, the response is blocked. The check passes such as in this example if either the Access-Control-Allow-Origin matches the single origin exactly or contains the wildcard * operator.</li>      
     </ul>
 
-    <p>This is where the DocumentFragment class having an interface almost the same as the global document object comes in. With this, you can call querySelector on the fragment just like you would to find elements in the page, and get a real Element or NodeList back that you can then manipulate just like if you had requested elements in the page itself.</p>
-    <p>Consider the following example code:</p>
+    <h4>II. Preflighted requests</h4>
+    <p>A preflighted request is the other type of CORS request. A preflighted request is a CORS request where the browser is required to send a preflight request (i.e. a preliminary probe) before sending the request being preflighted to ask the server permission if the original CORS request can proceed. This preflight request itself is an OPTIONS request to the same URL.</p>
+    <h4>Typical cases requiring preflighted requests:</h4>
+    <ul>
+      <li>A website makes an AJAX call to POST JSON data to a REST API meaning the Content-Type header is application/json</li>
+      <li>A website makes an AJAX call to an API which uses a token to authenticate the API in a request header such Authorization</li>
+    </ul>
+    <p>This means it can be common for a REST API powering a single-page app to have the majority of AJAX requests preflighted.</p>
+    <p>Example flow</p>
+    <p>1. A browser tab open to https://www.mydomain.com  initiates an authenticated AJAX request POST https://api.mydomain.com/widgets with a JSON payload. The browser sends the OPTIONS request first (aka the preflight request) with the proposed Requested Method and Requested Headers of the main request:</p>
     <p class="example">
-      &lt;template id='modalTemplate'&gt;<br>
-        &lt;div class='modal fade' tabindex='-1' role='dialog' aria-hidden='true'&gt;<br>
-            &lt;div class='modal-dialog' role='document'&gt;<br>
-                &lt;div class='modal-content'&gt;<br>
-                    &lt;div class='modal-header'&gt;<br>
-                        &lt;h5 class='modal-title'&gt;&lt;/h5&gt;<br>
-                        &lt;button type='button' class='close' data-dismiss='modal' aria-label='close'&gt;<br>
-                            &lt;span aria-hidden='true'&gt;&times;&lt;/span&gt;<br>
-                        &lt;/button&gt;<br>
-                    &lt;/div&gt;<br>
-                    &lt;div class='modal-body'&gt;&lt;/div&gt;<br>
-                    &lt;div class='modal-footer'&gt;<br>
-                        &lt;button type='button' class='btn btn-secondary' data-dismiss='modal'&gt;Close&lt;/button&gt;<br>
-                        &lt;button type='button' class='btn btn-primary'&gt;Save&lt;/button&gt;<br>
-                    &lt;/div&gt;<br>
-                &lt;/div&gt;<br>
-            &lt;/div&gt;<br>
-        &lt;/div&gt;<br>
-    &lt;/template&gt;
+      OPTIONS /widgets/ HTTP/1.1<br>
+      Host: api.mydomain.com<br>
+      Origin: https://www.mydomain.com<br>
+      Access-Control-Request-Method: POST<br>
+      Access-Control-Request-Headers: Authorization, Content-Type<br>
+      [Rest of request...]
     </p>
-
-    <p>Now our template is a basic skeleton for a Bootstrap 4 modal. Note that there are no ID attributes (or anything that references them) here. Template contents still need to meet the uniqueness requirement for ID attributes across the whole page, so it's safest to just avoid them in the template itself and populate them from your code as you're using the template.</p>
+    <p>2. The server respond back specifying the allowed HTTP methods and headers. If the original CORS request intended to send a header or HTTP method not in the list, the browser will fail without attempting the CORS request.</p>
     <p class="example">
-      const modalTemplate = document.querySelector('#modalTemplate')<br><br>
-
-      function createModal(id, title, body) {<br>
-          const node = modalTemplate.cloneNode(true)<br>
-          const modal = node.querySelector('.modal')<br>
-          const modalTitle = node.querySelector('.modal-title')<br>
-          const modalBody = node.querySelector('.modal-body')<br><br>
-
-          modal.id = id<br>
-          modal.setAttribute('aria-labelledby', `${id}Title`)<br><br>
-
-          modalTitle.id = `${id}Title`<br>
-          modalTitle.textContent = title<br><br>
-
-          modalBody.innerHTML = body<br><br>
-
-          document.body.append(node)<br><br>
-
-          return document.querySelector(`#${id}`)<br>
-      }
+      HTTP/1.1 200 OK<br>
+      Access-Control-Allow-Origin: https://www.mydomain.com<br>
+      Access-Control-Allow-Methods: POST, GET, OPTIONS<br>
+      Access-Control-Allow-Headers: Authorization, Content-Type<br>
+      Content-Type: application/json<br>
+      [Rest of response...]
+    </p>
+    <p>3. Since the headers and method pass the check, the browser sends the original CORS request. Note the Origin header is on this request also.</p>
+    <p class="example">
+      POST /widgets/ HTTP/1.1<br>
+      Host: api.mydomain.com<br>
+      Authorization: 1234567<br>
+      Content-Type: application/json<br>
+      Origin: https://www.mydomain.com<br>
+      [Rest of request...]
+    </p>
+    <p>4. The response has the correct origin in Access-Control-Allow-Origin header so checks pass and control is handed back to the browser tab.</p>
+    <p class="example">
+      HTTP/1.1 200 OK<br>
+      Access-Control-Allow-Origin: https://www.mydomain.com<br>
+      Content-Type: application/json<br>
+      [Rest of response...] 
+    </p>
+    <h3>The Fetch API</h3>
+    <p>It has since been superseded by the Fetch API, which is currently a living standard for requesting and sending data asynchronously across a network.</p>
+    <h4>Basic Usage</h4>
+    <p>The Fetch API provides a global fetch() method that only has one mandatory argument, which is the URL of the resource you wish to fetch. A very basic example would look something like the following piece of code:</p>
+    <p class="example">
+      fetch('https://example.com/data')<br>
+      .then( // code that handles the response )<br>
+      .catch( // code that runs if the server returns an error )
+    </p>
+    <p>The fetch() method returns a promise that resolves to the response returned from the URL that was provided as an argument. In the example above, the promise will be resolved when a response is received from the URL 'https:example.com/data'. Because it’s a promise, we can also use a catch statement at the end to deal with any errors that may occur.</p>
+    <h4>Response Interface</h4>
+    <p>The Fetch API introduced the Response interface that deals with the object that’s returned when the promise is fulfilled. Response objects have a number of properties and methods that allow us to process the response effectively.</p>
+    <p>We can use an if block to check if the request was successful, and throw an error otherwise:</p>
+    <p class="example">
+      const url = 'https:example.com/data';<br><br>
+      fetch(url)<br>
+      .then((response) => {<br>
+          if(response.ok) {<br>
+              return response;<br>
+          }<br>
+          throw Error(response.statusText);<br>
+      })<br>
+      .then( response => // do something with response )<br>
+      .catch( error => console.log('There was an error!') )
+    </p>
+    <p>Notice that the error thrown refers to the statusText property of the response object and specifies the status message that corresponds to the code returned, for example it might be 'Forbidden' for a status code of 403.</p>
+    <p>Some other properties of the Response object are:</p>
+    <ul>
+      <li>headers – A Headers object (see later section) containing any headers associated with the response</li>
+      <li>url – A string containing the URL of response</li>
+      <li>redirected – A boolean value that specifies if the response is the result of a redirect</li>
+      <li>type – A string value of 'basic', 'cors', 'error' or 'opaque'. A value of 'basic' is used for a response from the same domain. A value of 'cors' means the data was received from a valid cross-origin request from a different domain. A value of 'opaque' is used for a response received from 'no-cors' request from another domain, which means access to the data will be severely restricted. A value of 'error' is used when a network error occurs.</li>
+    </ul>
+    <h4>Redirects</h4>
+    <p>The redirect() method can be used to redirect to another URL. It creates a new promise that resolves to the response from the redirected URL.</p>
+    <p class="example">
+      fetch(url)<br>
+      .then( response => response.redirect(newURL)); // redirects to another URL<br>
+      .then( // do something else )<br>
+      .catch( error => console.log('There was an error: ', error))
+    </p>
+    <h4>Text Responses</h4>
+    <p>The text() method takes a stream of text from the response, reads it to completion and then returns a promise that resolves to a USVSting object that can be treated as a string in JavaScript.</p>
+    <p class="example">
+      fetch(url)<br>
+      .then( response => response.text() ); // transforms the text stream into a JavaScript string<br>
+      .then( text => console.log(text) )<br>
+      .catch( error => console.log('There was an error: ', error))
+    </p>
+    <h4>File Responses</h4>
+    <p>The blob() method is used to read a file of raw data, such as an image or a spreadsheet. Once it has read the whole file, it returns a promise that resolves with a blob object.</p>
+    <p class="example">
+      fetch(url)<br>
+      .then( response => response.blob() ); // transforms the data into a blob object<br>
+      .then( blob => console.log(blob.type) )<br>
+      .catch( error => console.log('There was an error: ', error))
+    </p>
+    <h4>JSON Responses</h4>
+    <p>JSON is probably the most common format for AJAX responses. The json() method is used to deal with these by transforming a stream of JSON data into a promise that resolves to a JavaScript object.</p>
+    <p class="example">
+      fetch(url)<br>
+      .then( response => response.json() ); // transforms the JSON data into a JavaScript object<br>
+      .then( data => console.log(Object.entries(data)) )<br>
+      .catch( error => console.log('There was an error: ', error))
+    </p>
+    <h4>Creating Response Objects</h4>
+    <p>Although most of the time you will be dealing with a response object that is returned from a request you make, you can also create your own response objects using a constructor function:</p>
+    <p class="example">
+      const response = new Response( 'Hello!', {<br>
+        ok: true,<br>
+        status: 200,<br>
+        statusText: 'OK',<br>
+        type: 'cors',<br>
+        url: '/api'<br>
+      });
+    </p>
+    <p>A constructor function is used to create a new Request object. An example is shown below:</p>
+    <p class="example">
+      const request = new Request('https://example.com/data', {<br>
+        method: 'GET',<br>
+        mode: 'cors',<br>
+        redirect: 'follow',<br>
+        cache: 'no-cache'<br>
+      });
+    </p>
+    <p>The url property is the first argument, and is required. The second argument is an object made up of any of the other properties listed above.</p>
+    <p>Once the Request object is assigned to a variable, it can then be used as the parameter of the fetch() method:</p>
+    <p class="example">
+      fetch(request)<br>
+      .then( // do something with the response )<br>
+      .catch( // handle any errors)
+    </p>
+    <p>Alternatively, you can enter the URL and object directly as arguments of the fetch() method, without having to create a Request object:</p>
+    <p class="example">
+      fetch('https://example.com/data', {<br>
+        method: 'GET',<br>
+        mode: 'cors',<br>
+        redirect: 'follow',<br>
+        cache: 'no-cache'<br>
+      })<br>
+      .then( // do something with the response )<br>
+      .catch( // handle any errors)
+    </p>
+    <h4>Putting It All Together</h4>
+    <p>We can use the Headers, Request and Response objects to put together a typical example that sets up the URL, Request and Headers before calling the fetch() method:</p>
+    <p class="example">
+      const url = 'https:example.com/data';<br>
+      const headers = new Headers({ 'Content-Type': 'text/plain', 'Accept-Charset' : 'utf-8', 'Accept-Encoding':'gzip,deflate' })<br><br>
+      const request = (url,{<br>
+          headers: headers<br>
+      })<br><br>
+      fetch(request)<br>
+      .then( function(response) {<br>
+          if(response.ok) {<br>
+              return response;<br>
+          }<br>
+          throw Error(response.statusText);<br>
+      })<br>
+      .then( response => // do something with response )<br>
+      .catch( error => console.log('There was an error!') )
+    </p>
+    <h4>Receiving Information</h4>
+    <p>To demonstrate how to update a web page using Ajax, we’ll need to set up a demonstration page. Create a file called 'ajax.html' that contains the following code:</p>
+    <p class="example">
+      &lt;!doctype html><br>
+      &lt;html lang='en'><br>
+      &lt;head><br>
+      &lt;meta charset='utf-8'><br>
+      &lt;title>Ajax Example</title><br>
+      &lt;/head><br>
+      &lt;body><br>
+      &lt;button id='number'>Number Fact</button><br>
+      &lt;button id='chuck'>Chuck Norris Fact</button><br>
+      &lt;div id='output'><br>
+          Ajax response will appear here<br>
+      &lt;/div><br>
+      &lt;script src='main.js'></script><br>
+      &lt;/body>
     </p>
 
     <br><br><br>
