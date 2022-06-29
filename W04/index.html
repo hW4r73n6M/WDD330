@@ -94,216 +94,40 @@
   </nav>
   
   <article>
-    <h2 style="text-align: center;">2022 - W03</h2>
-    <h1>L05 - NOTES: CORS (Cross-Origin Resource Sharing)</h1>
+    <h2 style="text-align: center;">2022 - W04</h2>
+    <h1>L07 - NOTES: Function Properties and Methods</h1>
 
-    <h3>What is CORS</h3>
-    <p>CORS is a security mechanism that allows a web page from one domain or Origin to access a resource with a different domain (a cross-domain request).</p>
-    <h3>How CORS works</h3>
-    <p>There are two types of CORS requests, simple requests [https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#simple-requests] and preflighted requests [https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#preflighted-requests].</p>
-    <h4>I. Simple requests</h4>
-    <p>A simple request is a CORS request that doesn’t require a preflight request (preliminary checks) before being initiated.</p>
-    <ul>
-      <li>A browser tab open to https://www.mydomain.com  initiates AJAX request GET https://api.mydomain.com/widgets</li>
-      <li>Along with adding headers like Host, the browser automatically adds the Origin Request Header for cross-origin requests:</li>
-        <p class="example">
-          GET /widgets/ HTTP/1.1<br>
-          Host: api.mydomain.com<br>
-          Origin: https://www.mydomain.com<br>
-          [Rest of request...]
-        </p>
-      <li>The server checks the Origin request header. If the Origin value is allowed, it sets the Access-Control-Allow-Origin to the value in the request header Origin.</li>
-      <p class="example">
-          HTTP/1.1 200 OK  <br>
-          Access-Control-Allow-Origin: https://www.mydomain.com  <br>
-          Content-Type: application/json<br>
-          [Rest of response...] 
-      </p>
-      <li>When the browser receives the response, the browser checks the Access-Control-Allow-Origin header to see if it matches the origin of the tab. If not, the response is blocked. The check passes such as in this example if either the Access-Control-Allow-Origin matches the single origin exactly or contains the wildcard * operator.</li>      
-    </ul>
+    <p>The fact that functions are first-class objects means they can have properties and methods themselves. For example, all functions have a length property that returns the number of parameters the function has.</p>
+    <p class="example">
+      function square(x) {<br>
+          return x*x;<br>
+      }
+    </p>
+    <p>If we query the length property, we can see that it accepts one parameter:</p>
+    <p class="example">
+      square.length<br>
+      << 1
+    </p>
+    <h4>Call and Apply Methods</h4>
+    <p>The call() method can be used to set the value of this inside a function to an object that is provided as the first argument.</p>
+    <p>In the following example, the sayHello() function refers to an unspecific object called this that has a property called name:</p>
+    <p class="example">
+        function sayHello(){<br>
+            return `Hello, my name is ${ this.name }`;<br>
+        }
+    </p>
+    <p>We can create some objects that have a name property, then use the call() method to invoke the sayHello() function, providing each object as an argument. This will then take the value of this in the function:</p>
+    <p class="example">
+        const clark = { name: 'Clark' };
+        const bruce = { name: 'Bruce' };
 
-    <h4>II. Preflighted requests</h4>
-    <p>A preflighted request is the other type of CORS request. A preflighted request is a CORS request where the browser is required to send a preflight request (i.e. a preliminary probe) before sending the request being preflighted to ask the server permission if the original CORS request can proceed. This preflight request itself is an OPTIONS request to the same URL.</p>
-    <h4>Typical cases requiring preflighted requests:</h4>
-    <ul>
-      <li>A website makes an AJAX call to POST JSON data to a REST API meaning the Content-Type header is application/json</li>
-      <li>A website makes an AJAX call to an API which uses a token to authenticate the API in a request header such Authorization</li>
-    </ul>
-    <p>This means it can be common for a REST API powering a single-page app to have the majority of AJAX requests preflighted.</p>
-    <p>Example flow</p>
-    <p>1. A browser tab open to https://www.mydomain.com  initiates an authenticated AJAX request POST https://api.mydomain.com/widgets with a JSON payload. The browser sends the OPTIONS request first (aka the preflight request) with the proposed Requested Method and Requested Headers of the main request:</p>
-    <p class="example">
-      OPTIONS /widgets/ HTTP/1.1<br>
-      Host: api.mydomain.com<br>
-      Origin: https://www.mydomain.com<br>
-      Access-Control-Request-Method: POST<br>
-      Access-Control-Request-Headers: Authorization, Content-Type<br>
-      [Rest of request...]
+        sayHello.call(clark);
+        << 'Hello, my name is Clarke'
+
+        sayHello.call(bruce);
+        << 'Hello, my name is Bruce'
     </p>
-    <p>2. The server respond back specifying the allowed HTTP methods and headers. If the original CORS request intended to send a header or HTTP method not in the list, the browser will fail without attempting the CORS request.</p>
-    <p class="example">
-      HTTP/1.1 200 OK<br>
-      Access-Control-Allow-Origin: https://www.mydomain.com<br>
-      Access-Control-Allow-Methods: POST, GET, OPTIONS<br>
-      Access-Control-Allow-Headers: Authorization, Content-Type<br>
-      Content-Type: application/json<br>
-      [Rest of response...]
-    </p>
-    <p>3. Since the headers and method pass the check, the browser sends the original CORS request. Note the Origin header is on this request also.</p>
-    <p class="example">
-      POST /widgets/ HTTP/1.1<br>
-      Host: api.mydomain.com<br>
-      Authorization: 1234567<br>
-      Content-Type: application/json<br>
-      Origin: https://www.mydomain.com<br>
-      [Rest of request...]
-    </p>
-    <p>4. The response has the correct origin in Access-Control-Allow-Origin header so checks pass and control is handed back to the browser tab.</p>
-    <p class="example">
-      HTTP/1.1 200 OK<br>
-      Access-Control-Allow-Origin: https://www.mydomain.com<br>
-      Content-Type: application/json<br>
-      [Rest of response...] 
-    </p>
-    <h3>The Fetch API</h3>
-    <p>It has since been superseded by the Fetch API, which is currently a living standard for requesting and sending data asynchronously across a network.</p>
-    <h4>Basic Usage</h4>
-    <p>The Fetch API provides a global fetch() method that only has one mandatory argument, which is the URL of the resource you wish to fetch. A very basic example would look something like the following piece of code:</p>
-    <p class="example">
-      fetch('https://example.com/data')<br>
-      .then( // code that handles the response )<br>
-      .catch( // code that runs if the server returns an error )
-    </p>
-    <p>The fetch() method returns a promise that resolves to the response returned from the URL that was provided as an argument. In the example above, the promise will be resolved when a response is received from the URL 'https:example.com/data'. Because it’s a promise, we can also use a catch statement at the end to deal with any errors that may occur.</p>
-    <h4>Response Interface</h4>
-    <p>The Fetch API introduced the Response interface that deals with the object that’s returned when the promise is fulfilled. Response objects have a number of properties and methods that allow us to process the response effectively.</p>
-    <p>We can use an if block to check if the request was successful, and throw an error otherwise:</p>
-    <p class="example">
-      const url = 'https:example.com/data';<br><br>
-      fetch(url)<br>
-      .then((response) => {<br>
-          if(response.ok) {<br>
-              return response;<br>
-          }<br>
-          throw Error(response.statusText);<br>
-      })<br>
-      .then( response => // do something with response )<br>
-      .catch( error => console.log('There was an error!') )
-    </p>
-    <p>Notice that the error thrown refers to the statusText property of the response object and specifies the status message that corresponds to the code returned, for example it might be 'Forbidden' for a status code of 403.</p>
-    <p>Some other properties of the Response object are:</p>
-    <ul>
-      <li>headers – A Headers object (see later section) containing any headers associated with the response</li>
-      <li>url – A string containing the URL of response</li>
-      <li>redirected – A boolean value that specifies if the response is the result of a redirect</li>
-      <li>type – A string value of 'basic', 'cors', 'error' or 'opaque'. A value of 'basic' is used for a response from the same domain. A value of 'cors' means the data was received from a valid cross-origin request from a different domain. A value of 'opaque' is used for a response received from 'no-cors' request from another domain, which means access to the data will be severely restricted. A value of 'error' is used when a network error occurs.</li>
-    </ul>
-    <h4>Redirects</h4>
-    <p>The redirect() method can be used to redirect to another URL. It creates a new promise that resolves to the response from the redirected URL.</p>
-    <p class="example">
-      fetch(url)<br>
-      .then( response => response.redirect(newURL)); // redirects to another URL<br>
-      .then( // do something else )<br>
-      .catch( error => console.log('There was an error: ', error))
-    </p>
-    <h4>Text Responses</h4>
-    <p>The text() method takes a stream of text from the response, reads it to completion and then returns a promise that resolves to a USVSting object that can be treated as a string in JavaScript.</p>
-    <p class="example">
-      fetch(url)<br>
-      .then( response => response.text() ); // transforms the text stream into a JavaScript string<br>
-      .then( text => console.log(text) )<br>
-      .catch( error => console.log('There was an error: ', error))
-    </p>
-    <h4>File Responses</h4>
-    <p>The blob() method is used to read a file of raw data, such as an image or a spreadsheet. Once it has read the whole file, it returns a promise that resolves with a blob object.</p>
-    <p class="example">
-      fetch(url)<br>
-      .then( response => response.blob() ); // transforms the data into a blob object<br>
-      .then( blob => console.log(blob.type) )<br>
-      .catch( error => console.log('There was an error: ', error))
-    </p>
-    <h4>JSON Responses</h4>
-    <p>JSON is probably the most common format for AJAX responses. The json() method is used to deal with these by transforming a stream of JSON data into a promise that resolves to a JavaScript object.</p>
-    <p class="example">
-      fetch(url)<br>
-      .then( response => response.json() ); // transforms the JSON data into a JavaScript object<br>
-      .then( data => console.log(Object.entries(data)) )<br>
-      .catch( error => console.log('There was an error: ', error))
-    </p>
-    <h4>Creating Response Objects</h4>
-    <p>Although most of the time you will be dealing with a response object that is returned from a request you make, you can also create your own response objects using a constructor function:</p>
-    <p class="example">
-      const response = new Response( 'Hello!', {<br>
-        ok: true,<br>
-        status: 200,<br>
-        statusText: 'OK',<br>
-        type: 'cors',<br>
-        url: '/api'<br>
-      });
-    </p>
-    <p>A constructor function is used to create a new Request object. An example is shown below:</p>
-    <p class="example">
-      const request = new Request('https://example.com/data', {<br>
-        method: 'GET',<br>
-        mode: 'cors',<br>
-        redirect: 'follow',<br>
-        cache: 'no-cache'<br>
-      });
-    </p>
-    <p>The url property is the first argument, and is required. The second argument is an object made up of any of the other properties listed above.</p>
-    <p>Once the Request object is assigned to a variable, it can then be used as the parameter of the fetch() method:</p>
-    <p class="example">
-      fetch(request)<br>
-      .then( // do something with the response )<br>
-      .catch( // handle any errors)
-    </p>
-    <p>Alternatively, you can enter the URL and object directly as arguments of the fetch() method, without having to create a Request object:</p>
-    <p class="example">
-      fetch('https://example.com/data', {<br>
-        method: 'GET',<br>
-        mode: 'cors',<br>
-        redirect: 'follow',<br>
-        cache: 'no-cache'<br>
-      })<br>
-      .then( // do something with the response )<br>
-      .catch( // handle any errors)
-    </p>
-    <h4>Putting It All Together</h4>
-    <p>We can use the Headers, Request and Response objects to put together a typical example that sets up the URL, Request and Headers before calling the fetch() method:</p>
-    <p class="example">
-      const url = 'https:example.com/data';<br>
-      const headers = new Headers({ 'Content-Type': 'text/plain', 'Accept-Charset' : 'utf-8', 'Accept-Encoding':'gzip,deflate' })<br><br>
-      const request = (url,{<br>
-          headers: headers<br>
-      })<br><br>
-      fetch(request)<br>
-      .then( function(response) {<br>
-          if(response.ok) {<br>
-              return response;<br>
-          }<br>
-          throw Error(response.statusText);<br>
-      })<br>
-      .then( response => // do something with response )<br>
-      .catch( error => console.log('There was an error!') )
-    </p>
-    <h4>Receiving Information</h4>
-    <p>To demonstrate how to update a web page using Ajax, we’ll need to set up a demonstration page. Create a file called 'ajax.html' that contains the following code:</p>
-    <p class="example">
-      &lt;!doctype html><br>
-      &lt;html lang='en'><br>
-      &lt;head><br>
-      &lt;meta charset='utf-8'><br>
-      &lt;title>Ajax Example</title><br>
-      &lt;/head><br>
-      &lt;body><br>
-      &lt;button id='number'>Number Fact</button><br>
-      &lt;button id='chuck'>Chuck Norris Fact</button><br>
-      &lt;div id='output'><br>
-          Ajax response will appear here<br>
-      &lt;/div><br>
-      &lt;script src='main.js'></script><br>
-      &lt;/body>
-    </p>
+
 
     <br><br><br>
 
