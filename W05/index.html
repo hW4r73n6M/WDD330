@@ -188,8 +188,99 @@
       }
     </p>
 
-
-
+    <h1>L10 - NOTES: CALLBACKS & HIGHER-ORDER FUNCTIONS IN JAVASCRIPT</h1>
+    <p><strong>Callbacks and higher-order functions</strong> are some of the most misunderstood concepts in JavaScript. In this post, we will become familiar with them to write pro-level code as JavaScript engineers.</p>
+    <p><strong>callback function</strong> is a function passed into another function as an argument, which is then invoked inside the outer function to complete some sort action.</p>
+    <h3>HIGHER-ORDER FUNCTIONS</h3>
+    <p>Any function that takes in a function or returns one out is a higher-order function. This is just a term to depict these functions - we call any function that does that a higher-order function - yet there’s nothing unique about them inherently.</p>
+    <h3>WHY DO WE EVEN HAVE FUNCTIONS?</h3>
+    <p>Let’s see why…</p>
+    <h4>CREATE A FUNCTION 10 SQUARED</h4>
+    <ul>
+      <li>Take no input</li>
+      <li>Returns 10*10</li>
+    </ul>
+    <h4>TENSQUARED</h4>
+    <p class="example">
+      function tenSquared() {<br>
+        return 10 * 10;<br>
+      }<br>
+      tenSquared() // 100
+    </p>
+    <h4>AND A 9 SQUARED FUNCTION? 125 SQUARED?</h4>
+    <p>What principle are we breaking? <strong>DRY (Don’t Repeat Yourself )</strong></p>
+    <p><strong>We can generalize the function to make it reusable.</strong></p>
+    <p class="example">
+      function squareNum(num) {<br>
+        return num * num;<br>
+      }<br>
+      squareNum(10); // 100<br>
+      squareNum(9); // 81<br>
+      squareNum(8); // 64
+    </p>
+    <h3>GENERALIZING FUNCTIONS</h3>
+    <p><strong>Parameters (placeholders)</strong> mean we don’t need to decide what data to run our functionality on until we run the function. We then provide an actual value <strong>(argument)</strong> when we run the function. Higher-order functions follow this same guideline; we might not choose exactly which part of our functionality it is until we run our function.</p>
+    <p class="example">
+      function copyArrayAndMultiplyBy2(arr) {<br>
+        const output = [];<br>
+        for (let i = 0; i < arr.length; i++) {<br>
+          output.push(arr[i] * 2);<br>
+        }<br>
+        return output;<br>
+      }<br>
+      const myArray = [1, 2, 3];<br>
+      const result = copyArrayAndMultiplyBy2(myArray)
+    </p>
+    <p>What if you want to copy the array and divide it by 2?</p>
+    <p>What principle are we breaking? <strong>DRY (Don’t Repeat Yourself )</strong></p>
+    <p>We could generalize our function so we pass in our specific instruction only when we run <strong>copyArrayAndManipulate</strong>!</p>
+    <p class="example">
+      function copyArrayAndManipulate(arr, instructions) {<br>
+        const output = [];<br>
+        for (let i = 0; i < arr.length; i++) {<br>
+          output.push(instructions(arr[i]));<br>
+        }<br>
+        return output;<br>
+      }<br><br>      
+      function multiplyBy2(input) {<br>
+        return input * 2;<br>
+      }<br>
+      const result = copyArrayAndManipulate([1, 2, 3], multiplyBy2);
+    </p>
+    <h3>HOW WAS THIS POSSIBLE?</h3>
+    <p><strong>Functions in Javascript = first-class objects.</strong> In addition to this, let’s highlight some of the other features of functions:</p>
+    <ul>
+      <li>They can co-exist with and can be handled like other any Javascript object</li>
+      <li>Assigned to variables and properties of other objects</li>
+      <li>Passed as arguments into functions</li>
+      <li>Returned as values from functions</li>
+    </ul>
+    <p>Consider this piece of code</p>
+    <p class="example">
+      function copyArrayAndManipulate(arr, instructions) {<br>
+        const output = [];<br>
+        for (let i = 0; i < arr.length; i++) {<br>
+          output.push(instructions(arr[i]));<br>
+        }<br>
+        return output;<br>
+      }<br><br>
+      
+      function multiplyBy2(input) {<br>
+        return input * 2;<br>
+      }<br>
+      const result = copyArrayAndManipulate([1, 2, 3], multiplyBy2);
+    </p>
+    <h3>WHICH IS OUR HIGHER-ORDER FUNCTION ☝?</h3>
+    <p>The outer function that takes in a function is our higher-order.</p>
+    <h4>WHICH IS OUR CALLBACK FUNCTION?</h4>
+    <p>The function we insert is our callback function.</p>
+    <h3>WHY DO WE NEED TO MASTER THESE TWO CONCEPTS?</h3>
+    <ul>
+      <li>Callbacks and higher-order functions simplify our code and keep it <strong>DRY.</strong></li>
+      <li><strong>Declarative readable code:</strong> Map, filter, reduce - the foremost readable way to write code to work with data.</li>
+      <li><strong>Pro interview prep:</strong> One of the most popular topics to check in an interview both for mid/senior-level job interviews.</li>
+      <li><strong>Asynchronous JavaScript:</strong> Callbacks are a central part of async Javascript, and are under the hood of <strong>promises, async/await.</strong></li>
+    </ul>
     
     
 
